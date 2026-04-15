@@ -46,9 +46,14 @@ self.addEventListener('fetch', event => {
 					return cachedResponse;
 				}
 
-				return caches.open(RUNTIME).then(cache => {
-					return fetch(event.request).then(response => {
-						// Put a copy of the response in the runtime cache.
+				return fetch(event.request).then(response => {
+					// Only cache same-origin responses to avoid cache poisoning
+					const requestUrl = new URL(event.request.url);
+					if (requestUrl.origin !== self.location.origin) {
+						return response;
+					}
+
+					return caches.open(RUNTIME).then(cache => {
 						return cache.put(event.request, response.clone()).then(() => {
 							return response;
 						});

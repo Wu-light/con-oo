@@ -1,2 +1,2 @@
 export { createSudoku, createSudokuFromJSON } from './Sudoku.js';
-export { createGame, createGameFromJSON } from './Game.js';
+export { createGame, createGameFromJSON, loadFromJSON } from './Game.js';

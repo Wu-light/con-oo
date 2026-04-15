@@ -70,6 +70,14 @@ function createGameInternal(currentSudoku, history, historyIdx) {
         historyIndex: _idx,
       };
     },
+
+    /**
+     * Save the full game state to a JSON string.
+     * @returns {string}
+     */
+    saveToJSON() {
+      return JSON.stringify(this.toJSON());
+    },
   };
 }
 
@@ -90,11 +98,19 @@ export function createGame({ sudoku }) {
 }
 
 /**
- * Restore a Game from its JSON representation.
+ * Restore a Game from its JSON representation (plain object).
  * @param {object} json
  */
 export function createGameFromJSON(json) {
   const currentSudoku = createSudokuFromJSON(json.currentSudoku);
   const history = json.history.map(s => createSudokuFromJSON(s));
   return createGameInternal(currentSudoku, history, json.historyIndex);
+}
+
+/**
+ * Restore a Game from a JSON string (inverse of game.saveToJSON()).
+ * @param {string} jsonString
+ */
+export function loadFromJSON(jsonString) {
+  return createGameFromJSON(JSON.parse(jsonString));
 }
